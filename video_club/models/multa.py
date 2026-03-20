@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+TARIFA_POR_DIA = 1.5  # euros por día de retraso
+
 @dataclass
 class Multa:
     """Entidad Multa.
@@ -24,4 +26,6 @@ class Multa:
         Output:
             float (0.0 si dias_retraso <= 0)
         """
-        raise NotImplementedError
+        if dias_retraso <= 0:
+            return 0.0
+        return round(dias_retraso * TARIFA_POR_DIA, 2)
