@@ -1,6 +1,6 @@
 from datetime import date
 from typing import List, Optional
-from models.models import Pelicula, Cliente, Alquiler, Multa
+from Video_club.models.peliculas import Pelicula, Cliente, Alquiler, Multa
 from database.database import DatabaseManager
 
 class VideoClubService:
