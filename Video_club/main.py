@@ -1,20 +1,16 @@
-from database.database import DatabaseManager
-from services.services import VideoClubService
-from ui.ui import ConsoleUI
+from video_club.database.connection import Database
+from video_club.ui.console import ConsoleUI
 
-def main():
-    """Inicializa componentes y arranca la interfaz."""
-    # 1. Inicializar DB (crea tablas si no existen)
-    db_manager = DatabaseManager("videoclub_v1.db")
-    
-    # 2. Inyectar DB en el servicio
-    service = VideoClubService(db_manager)
-    
-    # 3. Inyectar servicio en la UI
-    app = ConsoleUI(service)
-    
-    # 4. Correr
-    app.ejecutar()
+
+def main() -> None:
+    """Punto de entrada de la aplicación."""
+    db = Database()
+    db.connect()
+    db.create_tables()
+
+    ui = ConsoleUI()
+    ui.ejecutar()
+
 
 if __name__ == "__main__":
     main()
