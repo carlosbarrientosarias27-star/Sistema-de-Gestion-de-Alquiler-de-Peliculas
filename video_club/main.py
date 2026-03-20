@@ -1,15 +1,16 @@
-from video_club.database.connection import Database
-from video_club.ui.console import ConsoleUI
+from video_club.database.init_db import init_db
+from video_club.ui.menu import Menu
 
 
 def main() -> None:
-    """Punto de entrada de la aplicación."""
-    db = Database()
-    db.connect()
-    db.create_tables()
+    """Punto de entrada de la aplicación.
 
-    ui = ConsoleUI()
-    ui.ejecutar()
+    Output:
+        None
+    """
+    init_db()
+    menu = Menu()
+    menu.ejecutar()
 
 
 if __name__ == "__main__":

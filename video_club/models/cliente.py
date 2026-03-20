@@ -2,11 +2,13 @@ from dataclasses import dataclass
 
 @dataclass
 class Cliente:
-    """Representa un cliente del videoclub."""
+    """Entidad Cliente.
+
+    Atributos:
+        id_cliente: int
+        nombre: str
+        email: str
+    """
     id_cliente: int
     nombre: str
     email: str
-
-    def __post_init__(self) -> None:
-        """Valida los datos del cliente."""
-        raise NotImplementedError
