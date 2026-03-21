@@ -1,7 +1,7 @@
 from datetime import date
-from video_club.services.alquiler_service import AlquilerService
-from video_club.services.pelicula_service import PeliculaService
-from video_club.services.cliente_service import ClienteService
+from services.alquiler_service import AlquilerService
+from services.pelicula_service import PeliculaService
+from services.cliente_service import ClienteService
 
 class Menu:
     def __init__(self):

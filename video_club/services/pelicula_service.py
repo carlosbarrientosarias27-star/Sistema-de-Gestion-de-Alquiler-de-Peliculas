@@ -1,6 +1,6 @@
 from typing import Optional
-from video_club.models.pelicula import Pelicula
-from video_club.database.connection import get_connection
+from models.pelicula import Pelicula
+from database.connection import obtener_conexion
 
 class PeliculaService:
     def registrar_pelicula(self, codigo: str, titulo: str, director: str, copias: int) -> None:
@@ -9,7 +9,7 @@ class PeliculaService:
         if self.buscar_por_codigo(codigo):
             raise ValueError(f"Ya existe una película con el código {codigo}.")
         
-        conn = get_connection()
+        conn = obtener_conexion()
         cursor = conn.cursor()
         cursor.execute(
             "INSERT INTO pelicula (codigo, titulo, director, copias_disponibles) VALUES (?,?,?,?)",
@@ -19,7 +19,7 @@ class PeliculaService:
         conn.close()
 
     def buscar_por_codigo(self, codigo: str) -> Optional[Pelicula]:
-        conn = get_connection()
+        conn = obtener_conexion()
         cursor = conn.cursor()
         cursor.execute("SELECT codigo, titulo, director, copias_disponibles FROM pelicula WHERE codigo = ?", (codigo,))
         f = cursor.fetchone()

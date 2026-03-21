@@ -1,5 +1,5 @@
-from video_club.models.multa import Multa
-from video_club.database.connection import get_connection
+from models.multa import Multa
+from database.connection import obtener_conexion
  
  
 class MultaService:
@@ -21,7 +21,7 @@ class MultaService:
         if importe == 0.0:
             return 0.0
  
-        conn = get_connection()
+        conn = obtener_conexion()
         cursor = conn.cursor()
         cursor.execute(
             "INSERT INTO multa (id_alquiler, dias_retraso, importe) VALUES (?,?,?)",
