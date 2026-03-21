@@ -4,7 +4,7 @@ from typing import Optional, List
 
 from database.connection import obtener_conexion
 from models.alquiler import Alquiler
-from multa_service import MultaService
+from .multa_service import MultaService
 
 class AlquilerService:
     def __init__(self, multa_service: Optional[MultaService] = None):
