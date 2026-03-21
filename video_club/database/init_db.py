@@ -1,5 +1,4 @@
-from .connection import get_connection
-
+from .connection import obtener_conexion  # Change this line
 
 def init_db() -> None:
     """Crea las tablas necesarias si no existen.
@@ -7,7 +6,7 @@ def init_db() -> None:
     Output:
         None
     """
-    conn = get_connection()
+    conn = obtener_conexion()
     cursor = conn.cursor()
 
     cursor.execute("""

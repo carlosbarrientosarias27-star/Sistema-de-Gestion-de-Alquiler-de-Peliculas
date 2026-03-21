@@ -1,9 +1,8 @@
 import sqlite3
-from sqlite3 import Connection
 
 DB_NAME = "video_club.db"
 
-def obtener_conexion() -> Connection:
+def obtener_conexion():
     """
     Abre conexión SQLite y activa claves foráneas.
     
@@ -13,7 +12,6 @@ def obtener_conexion() -> Connection:
     conn = sqlite3.connect(DB_NAME)
     conn.execute("PRAGMA foreign_keys = ON;")
     return conn
-
 def crear_tablas() -> None:
     """
     Crea las 4 tablas necesarias para el sistema si no existen.
