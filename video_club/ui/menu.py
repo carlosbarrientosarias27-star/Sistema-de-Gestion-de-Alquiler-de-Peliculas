@@ -2,47 +2,38 @@ from datetime import date
 from video_club.services.alquiler_service import AlquilerService
 from video_club.services.pelicula_service import PeliculaService
 from video_club.services.cliente_service import ClienteService
- 
- 
+
 class Menu:
-    """Interfaz de usuario por consola."""
- 
     def __init__(self):
         self._alquiler_service = AlquilerService()
         self._pelicula_service = PeliculaService()
         self._cliente_service = ClienteService()
- 
+
     def mostrar_menu(self) -> None:
         print("""
-        1. Alquilar película
-        2. Devolver película
-        3. Buscar película
-        4. Buscar cliente
-        5. Listar alquileres activos
-        0. Salir
+        1. Alquilar película      5. Listar alquileres activos
+        2. Devolver película      6. Registrar película (NUEVO)
+        3. Buscar película        7. Registrar cliente (NUEVO)
+        4. Buscar cliente         0. Salir
         """)
- 
+
     def ejecutar(self) -> None:
-        """Loop principal del menú."""
         while True:
             self.mostrar_menu()
             opcion = input("Selecciona una opción: ").strip()
- 
-            if opcion == "1":
-                self._opcion_alquilar()
-            elif opcion == "2":
-                self._opcion_devolver()
-            elif opcion == "3":
-                self._opcion_buscar_pelicula()
-            elif opcion == "4":
-                self._opcion_buscar_cliente()
-            elif opcion == "5":
-                self._opcion_listar_activos()
+            
+            if opcion == "1": self._opcion_alquilar()
+            elif opcion == "2": self._opcion_devolver()
+            elif opcion == "3": self._opcion_buscar_pelicula()
+            elif opcion == "4": self._opcion_buscar_cliente()
+            elif opcion == "5": self._opcion_listar_activos()
+            elif opcion == "6": self._opcion_registrar_pelicula()
+            elif opcion == "7": self._opcion_registrar_cliente()
             elif opcion == "0":
                 print("¡Hasta luego!")
                 break
             else:
-                print("Opción no válida. Inténtalo de nuevo.")
+                print("Opción no válida.")
  
     # ------------------------------------------------------------------ #
     #  Opciones individuales                                               #
@@ -108,4 +99,23 @@ class Menu:
             print(f"  {a.id_alquiler:>4}  {a.id_cliente:>8}  "
                   f"{a.codigo_pelicula:<12}  {a.fecha_devolucion_prevista}")
         print()
- 
+    
+    def _opcion_registrar_pelicula(self) -> None:
+        try:
+            c = input("Código: ").strip()
+            t = input("Título: ").strip()
+            d = input("Director: ").strip()
+            n = int(input("Copias: "))
+            self._pelicula_service.registrar_pelicula(c, t, d, n)
+            print("\n✔ Película registrada correctamente.\n")
+        except ValueError as e:
+            print(f"\n✘ Error: {e}\n")
+
+    def _opcion_registrar_cliente(self) -> None:
+        try:
+            n = input("Nombre: ").strip()
+            e = input("Email: ").strip()
+            id_c = self._cliente_service.registrar_cliente(n, e)
+            print(f"\n✔ Cliente registrado con ID: {id_c}\n")
+        except ValueError as e:
+            print(f"\n✘ Error: {e}\n")
