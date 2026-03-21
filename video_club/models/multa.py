@@ -1,17 +1,9 @@
 from dataclasses import dataclass
 
-TARIFA_POR_DIA = 1.5  # euros por día de retraso
+TARIFA_DIARIA = 1.50
 
 @dataclass
 class Multa:
-    """Entidad Multa.
-
-    Atributos:
-        id_multa: int
-        id_alquiler: int
-        dias_retraso: int
-        importe: float
-    """
     id_multa: int
     id_alquiler: int
     dias_retraso: int
@@ -19,13 +11,15 @@ class Multa:
 
     @staticmethod
     def calcular_importe(dias_retraso: int) -> float:
-        """Calcula el importe de la multa.
-
-        Input:
-            dias_retraso: int
-        Output:
-            float (0.0 si dias_retraso <= 0)
+        """
+        Calcula el coste basado en días de retraso.
+        
+        Input: dias_retraso (int)
+        Output: float (Importe total)
         """
         if dias_retraso <= 0:
             return 0.0
-        return round(dias_retraso * TARIFA_POR_DIA, 2)
+        return round(dias_retraso * TARIFA_DIARIA, 2)
+
+    def __repr__(self) -> str:
+        return f"Multa #{self.id_multa} | Alquiler #{self.id_alquiler} | {self.dias_retraso} días | {self.importe:.2f}€"
