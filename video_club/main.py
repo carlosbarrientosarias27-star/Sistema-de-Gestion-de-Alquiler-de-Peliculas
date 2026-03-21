@@ -1,6 +1,3 @@
-import sys
-import os
-
 from database.init_db import init_db
 from ui.menu import Menu
 
