@@ -159,6 +159,5 @@ Fecha de devolución real (YYYY-MM-DD): 2025-08-13
 
 ## 👤 Autor
 
-**Tu Nombre** · `tu@email.com`  
-📅 Fecha: Julio 2025  
+**Tu Nombre** · Carlos   
 🐍 Python 3.10+ · 🗄️ SQLite3 · 🖥️ Interfaz de consola
