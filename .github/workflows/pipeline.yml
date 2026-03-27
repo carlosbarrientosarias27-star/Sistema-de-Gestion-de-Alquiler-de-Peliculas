@@ -24,10 +24,8 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-    - name: Inicializar Base de Datos (Opcional)
-      run: |
-        # Solo si tus tests necesitan que la DB exista físicamente antes
-        python database/init_db.py
+    - name: Run DB Init
+      run: python video_club/database/init_db.py
 
     - name: Ejecutar Tests con Pytest
       run: |
