@@ -1,0 +1,7 @@
+{
+    "python.testing.pytestArgs": [
+        "video_club"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
+}
