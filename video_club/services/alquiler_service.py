@@ -5,6 +5,7 @@ from typing import Optional, List
 
 from database.connection import get_connection
 from models.alquiler import Alquiler
+from models.multa import Multa
 from .multa_service import MultaService
 
 
@@ -32,34 +33,23 @@ class AlquilerService:
         if dias <= 0:
             raise ValueError("Los días deben ser positivos")
 
-
-        with get_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute("SELECT * FROM alquileres...")
-
-
-           # 1. Buscar película y comprobar stock vía Repository
         peli = self._pelicula_repo.obtener_por_codigo(codigo_pelicula)
         if not peli:
             raise ValueError("Película no encontrada")
         if peli["copias_disponibles"] <= 0:
             raise ValueError("No hay copias disponibles")
 
-        # 2. Buscar cliente vía Repository
         if not self._cliente_repo.existe(id_cliente):
             raise ValueError("Cliente no encontrado")
 
-        # 3. Calcular fechas
         fecha_alquiler = date.today()
         fecha_prevista = fecha_alquiler + timedelta(days=dias)
 
         try:
-            # 4. Delegar persistencia al AlquilerRepository
             id_generado = self._alquiler_repo.crear(
                 id_cliente, codigo_pelicula, fecha_alquiler, fecha_prevista
             )
 
-            # 5. Actualizar stock vía PeliculaRepository
             self._pelicula_repo.reducir_stock(codigo_pelicula)
             
             return Alquiler(id_generado, id_cliente, codigo_pelicula, fecha_alquiler, fecha_prevista, None)
@@ -68,19 +58,44 @@ class AlquilerService:
             raise RuntimeError(f"Error crítico en la base de datos: {e}")
 
 
-    def devolver_pelicula(self, id_alquiler, fecha_real, fecha_vencimiento):
-        if id_alquiler == 999: raise ValueError("Alquiler inexistente")
-        if id_alquiler == 888: raise ValueError("Alquiler ya devuelto")
-            
-        # Cálculo de días (Aquí se usa la lógica que antes estaba gris)
-        dias_retraso = (fecha_real - fecha_vencimiento).days
-        importe_multa = Multa.calcular_importe(dias_retraso)
+    def devolver_pelicula(self, id_alquiler: int, fecha_real: Optional[date] = None) -> dict:
+        """
+        Procesa la devolución de una película, calcula multa si hay retraso.
         
-        return {
+        Input:
+            id_alquiler: ID del alquiler a devolver.
+            fecha_real: Fecha de devolución (por defecto hoy).
+        Output:
+            dict con datos de la devolución y multa si aplica.
+        """
+        if fecha_real is None:
+            fecha_real = date.today()
+
+        alquiler = self._alquiler_repo.obtener_por_id(id_alquiler)
+        if not alquiler:
+            raise ValueError("Alquiler no encontrado")
+        
+        if alquiler["fecha_devolucion_real"]:
+            raise ValueError("Alquiler ya devuelto")
+
+        fecha_vencimiento = date.fromisoformat(alquiler["fecha_devolucion_prevista"])
+        
+        dias_retraso = (fecha_real - fecha_vencimiento).days
+        
+        resultado = {
             "id_alquiler": id_alquiler,
             "dias_retraso": max(0, dias_retraso),
-            "importe_multa": importe_multa
+            "importe_multa": 0.0
         }
+
+        if dias_retraso > 0:
+            resultado["importe_multa"] = Multa.calcular_importe(dias_retraso)
+            self._multa_service.calcular_y_guardar_multa(id_alquiler, dias_retraso)
+
+        self._alquiler_repo.actualizar_devolucion(id_alquiler, fecha_real.isoformat())
+        self._pelicula_repo.aumentar_stock(alquiler["codigo_pelicula"])
+        
+        return resultado
 
     def listar_alquileres_activos(self) -> List[Alquiler]:
         """
@@ -91,7 +106,7 @@ class AlquilerService:
         """
         with get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM alquileres...")
+            cursor.execute("SELECT * FROM alquileres WHERE fecha_devolucion_real IS NULL")
             filas = cursor.fetchall()
            
             return [self._mapear_alquiler(f) for f in filas]
@@ -106,20 +121,16 @@ class AlquilerService:
         Output:
             list[Alquiler]: Historial completo de alquileres.
         """
-        with get_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute("SELECT * FROM alquileres...")
-            filas = cursor.fetchall()
-           
-            return [self._mapear_alquiler(f) for f in filas]
+        filas = self._alquiler_repo.obtener_por_cliente(id_cliente)
+        return [self._mapear_alquiler(f) for f in filas]
 
 
-    def _mapear_alquiler(self, row: sqlite3.Row) -> Alquiler:
+    def _mapear_alquiler(self, row) -> Alquiler:
         """Helper interno para convertir una fila de BD a objeto Alquiler."""
         return Alquiler(
             id_alquiler=row["id_alquiler"],
             id_cliente=row["id_cliente"],
-            codigo_pelicula=row["id_pelicula"],
+            codigo_pelicula=row["codigo_pelicula"],
             fecha_alquiler=date.fromisoformat(row["fecha_alquiler"]),
             fecha_devolucion_prevista=date.fromisoformat(row["fecha_devolucion_prevista"]),
             fecha_devolucion_real=date.fromisoformat(row["fecha_devolucion_real"]) if row["fecha_devolucion_real"] else None

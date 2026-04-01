@@ -1,4 +1,4 @@
-from database.connection import get_connection  # Change this line
+from database.connection import get_connection
 
 def init_db() -> None:
     """Crea las tablas necesarias si no existen.
@@ -10,7 +10,7 @@ def init_db() -> None:
     cursor = conn.cursor()
 
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS pelicula (
+    CREATE TABLE IF NOT EXISTS peliculas (
         codigo TEXT PRIMARY KEY,
         titulo TEXT,
         director TEXT,
@@ -19,33 +19,33 @@ def init_db() -> None:
     """)
 
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS cliente (
-        id_cliente INTEGER PRIMARY KEY,
+    CREATE TABLE IF NOT EXISTS clientes (
+        id_cliente INTEGER PRIMARY KEY AUTOINCREMENT,
         nombre TEXT,
-        email TEXT
+        email TEXT UNIQUE
     )
     """)
 
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS alquiler (
+    CREATE TABLE IF NOT EXISTS alquileres (
         id_alquiler INTEGER PRIMARY KEY AUTOINCREMENT,
         id_cliente INTEGER,
-        codigo_pelicula TEXT,          -- ← corregido: era id_pelicula INTEGER
+        codigo_pelicula TEXT,
         fecha_alquiler TEXT,
         fecha_devolucion_prevista TEXT,
         fecha_devolucion_real TEXT,
-        FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente),
-        FOREIGN KEY (codigo_pelicula) REFERENCES pelicula(codigo)
+        FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente),
+        FOREIGN KEY (codigo_pelicula) REFERENCES peliculas(codigo)
     )
     """)
 
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS multa (
+    CREATE TABLE IF NOT EXISTS multas (
         id_multa INTEGER PRIMARY KEY AUTOINCREMENT,
         id_alquiler INTEGER,
         dias_retraso INTEGER,
         importe REAL,
-        FOREIGN KEY (id_alquiler) REFERENCES alquiler(id_alquiler)
+        FOREIGN KEY (id_alquiler) REFERENCES alquileres(id_alquiler)
     )
     """)
 

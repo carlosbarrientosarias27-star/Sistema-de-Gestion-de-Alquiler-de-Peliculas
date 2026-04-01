@@ -11,6 +11,7 @@ class ClienteRepository:
                 (cliente.nombre, cliente.email)
             )
             conn.commit()
+            return cursor.lastrowid
 
     def get_all(self):
         """Lista todos los clientes registrados."""
@@ -23,5 +24,9 @@ class ClienteRepository:
         """Busca un cliente por su ID numérico."""
         with get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM clientes WHERE id = ?", (id_cliente,))
+            cursor.execute("SELECT * FROM clientes WHERE id_cliente = ?", (id_cliente,))
             return cursor.fetchone()
+
+    def existe(self, id_cliente: int) -> bool:
+        """Verifica si existe un cliente."""
+        return self.find_by_id(id_cliente) is not None

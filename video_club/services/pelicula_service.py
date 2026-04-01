@@ -12,7 +12,7 @@ class PeliculaService:
         conn = get_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO pelicula (codigo, titulo, director, copias_disponibles) VALUES (?,?,?,?)",
+            "INSERT INTO peliculas (codigo, titulo, director, copias_disponibles) VALUES (?,?,?,?)",
             (codigo, titulo, director, copias)
         )
         conn.commit()
@@ -21,7 +21,15 @@ class PeliculaService:
     def buscar_por_codigo(self, codigo: str) -> Optional[Pelicula]:
         conn = get_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT codigo, titulo, director, copias_disponibles FROM pelicula WHERE codigo = ?", (codigo,))
+        cursor.execute("SELECT codigo, titulo, director, copias_disponibles FROM peliculas WHERE codigo = ?", (codigo,))
         f = cursor.fetchone()
         conn.close()
         return Pelicula(f[0], f[1], f[2], f[3]) if f else None
+
+    def listar_peliculas(self) -> list[Pelicula]:
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT codigo, titulo, director, copias_disponibles FROM peliculas")
+        filas = cursor.fetchall()
+        conn.close()
+        return [Pelicula(f[0], f[1], f[2], f[3]) for f in filas]

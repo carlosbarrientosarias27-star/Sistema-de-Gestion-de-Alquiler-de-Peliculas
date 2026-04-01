@@ -57,7 +57,7 @@ class Menu:
 
 
         while True:
-            print("\n" + "=" * 10 + " 🎬 VIDEOCLUB " + "=" * 10)
+            print("\n" + "=" * 10 + " VIDEOCLUB " + "=" * 10)
             print("1. Añadir película")
             print("2. Listar películas")
             print("3. Registrar cliente")
@@ -135,8 +135,11 @@ class Menu:
     def _realizar_devolucion(self) -> None:
         try:
             id_alq = self._leer_int("ID Alquiler: ")
-            self._alquiler_service.devolver_pelicula(id_alq, date.today())
-            print("\n✅ Devolución procesada.")
+            resultado = self._alquiler_service.devolver_pelicula(id_alq)
+            if resultado["dias_retraso"] > 0:
+                print(f"\n⚠️ Devolución con {resultado['dias_retraso']} días de retraso. Multa: {resultado['importe_multa']}€")
+            else:
+                print("\n✅ Devolución procesada sin retrasos.")
         except ValueError as e:
             print(f"\n❌ Error: {e}")
 

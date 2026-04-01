@@ -12,19 +12,45 @@ class PeliculaRepository:
             )
             conn.commit()
 
-    def find_by_codigo(self, codigo: str):
+    def obtener_por_codigo(self, codigo: str):
         """Busca una película por su código único."""
         with get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM peliculas WHERE codigo = ?", (codigo,))
             row = cursor.fetchone()
             if row:
-                return Pelicula(row[1], row[2], row[3], row[4])
+                return {
+                    "codigo": row["codigo"],
+                    "titulo": row["titulo"],
+                    "director": row["director"],
+                    "copias_disponibles": row["copias_disponibles"]
+                }
             return None
+
+    def reducir_stock(self, codigo: str):
+        """Reduce en 1 las copias disponibles."""
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "UPDATE peliculas SET copias_disponibles = copias_disponibles - 1 WHERE codigo = ?",
+                (codigo,)
+            )
+            conn.commit()
+
+    def aumentar_stock(self, codigo: str):
+        """Aumenta en 1 las copias disponibles."""
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "UPDATE peliculas SET copias_disponibles = copias_disponibles + 1 WHERE codigo = ?",
+                (codigo,)
+            )
+            conn.commit()
 
     def get_all(self):
         """Devuelve una lista de todas las películas."""
         with get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM peliculas")
-            return [Pelicula(row[1], row[2], row[3], row[4]) for row in cursor.fetchall()]
+            rows = cursor.fetchall()
+            return [Pelicula(row["codigo"], row["titulo"], row["director"], row["copias_disponibles"]) for row in rows]
