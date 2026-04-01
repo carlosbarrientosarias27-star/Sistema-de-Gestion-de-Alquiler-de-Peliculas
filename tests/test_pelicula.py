@@ -1,4 +1,4 @@
-from models.pelicula import Pelicula
+from video_club.models.pelicula import Pelicula
 import pytest
 
 # --- tiene_copias_disponibles ---
