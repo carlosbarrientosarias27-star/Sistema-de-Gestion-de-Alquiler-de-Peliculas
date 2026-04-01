@@ -1,42 +1,55 @@
-from video_club.models.pelicula import Pelicula
 import pytest
+from video_club.models.pelicula import Pelicula
 
-# --- tiene_copias_disponibles ---
+# --- Fixtures ---
 
-def test_tiene_copias_disponibles_true():
-    peli = Pelicula("COD001", "Inception", "Nolan", 2)
-    assert peli.tiene_copias_disponibles() is True
+@pytest.fixture
+def pelicula_valida():
+    """Retorna una instancia de Pelicula con stock inicial."""
+    return Pelicula(
+        codigo="COD001",
+        titulo="Inception",
+        director="Christopher Nolan",
+        copias_disponibles=2
+    )
 
-def test_tiene_copias_disponibles_false():
-    peli = Pelicula("COD002", "Titanic", "Cameron", 0)
-    assert peli.tiene_copias_disponibles() is False
+@pytest.fixture
+def pelicula_sin_stock():
+    """Retorna una instancia de Pelicula con 0 copias."""
+    return Pelicula("COD002", "Titanic", "James Cameron", 0)
 
+# --- Tests de Funcionalidad ---
 
-# --- reducir_copia ---
+def test_creacion_pelicula(pelicula_valida):
+    """Verifica que los atributos se asignen correctamente al crear la instancia."""
+    assert pelicula_valida.codigo == "COD001"
+    assert pelicula_valida.titulo == "Inception"
+    assert pelicula_valida.copias_disponibles == 2
 
-def test_reducir_copia_ok():
-    peli = Pelicula("COD001", "Inception", "Nolan", 2)
-    peli.reducir_copia()
-    assert peli.copias_disponibles == 1
+def test_tiene_copias_disponibles_true(pelicula_valida):
+    """Debe retornar True si hay copias."""
+    assert pelicula_valida.tiene_copias_disponibles() is True
 
-def test_reducir_copia_sin_stock_lanza_error():
-    peli = Pelicula("COD002", "Titanic", "Cameron", 0)
+def test_tiene_copias_disponibles_false(pelicula_sin_stock):
+    """Debe retornar False si el stock es 0."""
+    assert pelicula_sin_stock.tiene_copias_disponibles() is False
 
-    with pytest.raises(ValueError):
-        peli.reducir_copia()
+def test_reducir_copia_disminuye_stock(pelicula_valida):
+    """Verifica que el stock baje en una unidad."""
+    pelicula_valida.reducir_copia()
+    assert pelicula_valida.copias_disponibles == 1
 
+def test_reducir_copia_sin_stock_lanza_error(pelicula_sin_stock):
+    """Debe lanzar ValueError si se intenta reducir stock a cero copias."""
+    with pytest.raises(ValueError, match="No hay copias disponibles"):
+        pelicula_sin_stock.reducir_copia()
 
-# --- aumentar_copia ---
+def test_aumentar_copia_incrementa_stock(pelicula_valida):
+    """Verifica que el stock suba en una unidad."""
+    pelicula_valida.aumentar_copia()
+    assert pelicula_valida.copias_disponibles == 3
 
-def test_aumentar_copia():
-    peli = Pelicula("COD001", "Inception", "Nolan", 1)
-    peli.aumentar_copia()
-    assert peli.copias_disponibles == 2
-
-
-# --- __repr__ ---
-
-def test_repr_formato_correcto():
-    peli = Pelicula("COD001", "Inception", "Nolan", 2)
-    esperado = "[COD001] Inception - Nolan (2 copias)"
-    assert repr(peli) == esperado
+def test_representacion_string(pelicula_valida):
+    """Verifica que el método __repr__ tenga el formato esperado."""
+    esperado = "[COD001] Inception - Christopher Nolan (2 copias)"
+    assert repr(pelicula_valida) == esperado

@@ -6,7 +6,7 @@ from typing import Optional, List
 from ..database.connection import get_connection
 from ..models.alquiler import Alquiler
 from ..models.multa import Multa
-from multa_service import MultaService
+from video_club.services.multa_service import MultaService
 
 
 class AlquilerService:
