@@ -87,7 +87,12 @@ video_club/
 ├── ui/
 │   └── menu.py                 # Menú interactivo de consola
 ├── tests/
-│   └── test_videoclub.py       # Suite de tests con unittest
+│   └── test_alquiler_service.py   
+|    └── test_cliente_service.py
+|    └── test_cliente.py
+|    └── test_multa.py
+|    └── test_pelicula.py
+|    └── test_videoclub.py       # Suite de tests con pytest
 └── main.py                     # Punto de entrada de la aplicación
 ```
 
