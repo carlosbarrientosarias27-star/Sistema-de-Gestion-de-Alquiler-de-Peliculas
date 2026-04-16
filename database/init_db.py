@@ -1,4 +1,10 @@
-from database.connection import get_connection
+import sys
+import os
+
+# Add the current directory to the path so it can find connection.py
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+from connection import get_connection
 
 def init_db() -> None:
     """Crea las tablas necesarias si no existen.
@@ -30,7 +36,7 @@ def init_db() -> None:
     CREATE TABLE IF NOT EXISTS alquileres (
         id_alquiler INTEGER PRIMARY KEY AUTOINCREMENT,
         id_cliente INTEGER,
-        id_pelicula INTEGER,
+        id_pelicula IINTEGER,
         fecha_alquiler TEXT,
         fecha_devolucion_prevista TEXT,
         fecha_devolucion_real TEXT,
@@ -51,3 +57,8 @@ def init_db() -> None:
 
     conn.commit()
     conn.close()
+
+# These lines must have NO indentation (start at the very beginning of the line)
+if __name__ == "__main__":
+    init_db()
+    print("Database initialized successfully!")
