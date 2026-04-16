@@ -91,7 +91,7 @@ class Menu:
 
 
     def _añadir_pelicula(self) -> None:
-        id_pelicula = input("id: ").strip()
+        id_pelicula = input("id_pelicula: ").strip()
         titulo = input("Título: ").strip()
         director = input("Director: ").strip()
         try:

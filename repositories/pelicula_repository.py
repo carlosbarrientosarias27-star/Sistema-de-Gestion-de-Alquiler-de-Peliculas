@@ -16,11 +16,11 @@ class PeliculaRepository:
         """Busca una película por su código único."""
         with obtener_conexion() as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM peliculas WHERE id = ?", (id,))
+            cursor.execute("SELECT * FROM peliculas WHERE id_pelicula = ?", (codigo,))
             row = cursor.fetchone()
             if row:
                 return {
-                    "id_pelicula": row["id"],
+                    "id_pelicula": row["id_pelicula"],
                     "titulo": row["titulo"],
                     "director": row["director"],
                     "copias_disponibles": row["copias_disponibles"]
@@ -32,7 +32,7 @@ class PeliculaRepository:
         with obtener_conexion() as conn:
             cursor = conn.cursor()
             cursor.execute(
-                "UPDATE peliculas SET copias_disponibles = copias_disponibles - 1 WHERE id = ?",
+                "UPDATE peliculas SET copias_disponibles = copias_disponibles - 1 WHERE id_pelicula = ?",
                 (codigo,)
             )
             conn.commit()
@@ -42,7 +42,7 @@ class PeliculaRepository:
         with obtener_conexion() as conn:
             cursor = conn.cursor()
             cursor.execute(
-                "UPDATE peliculas SET copias_disponibles = copias_disponibles + 1 WHERE id = ?",
+                "UPDATE peliculas SET copias_disponibles = copias_disponibles + 1 WHERE id_pelicula = ?",
                 (id,)
             )
             conn.commit()
