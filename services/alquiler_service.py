@@ -93,7 +93,7 @@ class AlquilerService:
             self._multa_service.calcular_y_guardar_multa(id_alquiler, dias_retraso)
 
         self._alquiler_repo.actualizar_devolucion(id_alquiler, fecha_real.isoformat())
-        self._pelicula_repo.aumentar_stock(alquiler["codigo_pelicula"])
+        self._pelicula_repo.aumentar_stock(alquiler["id_pelicula"])
         
         return resultado
 
@@ -130,7 +130,7 @@ class AlquilerService:
         return Alquiler(
             id_alquiler=row["id_alquiler"],
             id_cliente=row["id_cliente"],
-            id_pelicula=row["id_pelicula"],
+            codigo_pelicula=row["id_pelicula"],
             fecha_alquiler=date.fromisoformat(row["fecha_alquiler"]),
             fecha_devolucion_prevista=date.fromisoformat(row["fecha_devolucion_prevista"]),
             fecha_devolucion_real=date.fromisoformat(row["fecha_devolucion_real"]) if row["fecha_devolucion_real"] else None

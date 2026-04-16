@@ -31,12 +31,12 @@ def alquiler_service(mocks):
 def test_alquilar_pelicula_exitoso(alquiler_service, mocks):
     """Verifica que un alquiler se registre correctamente si hay stock y el cliente existe."""
     # Configuración de los mocks
-    mocks["peli_repo"].obtener_por_codigo.return_value = {"codigo": "COD1", "copias_disponibles": 5}
+    mocks["peli_repo"].obtener_por_codigo.return_value = {"id_pelicula": "COD1", "copias_disponibles": 5}
     mocks["clie_repo"].existe.return_value = True
     mocks["alqu_repo"].crear.return_value = 1  # ID del nuevo alquiler
 
     # Ejecución
-    resultado = alquiler_service.alquilar_pelicula(id_cliente=10, codigo_pelicula="COD1", dias=3)
+    resultado = alquiler_service.alquilar_pelicula(id_cliente=10, id_pelicula="COD1", dias=3)
 
     # Verificaciones
     assert isinstance(resultado, Alquiler)
@@ -58,7 +58,7 @@ def test_devolver_con_retraso_genera_multa(alquiler_service, mocks):
     fecha_prevista = date.today() - timedelta(days=2)
     mocks["alqu_repo"].obtener_por_id.return_value = {
         "id_alquiler": 5,
-        "codigo_pelicula": "COD1",
+        "id_pelicula": "COD1",
         "fecha_devolucion_prevista": fecha_prevista.isoformat(),
         "fecha_devolucion_real": None
     }
@@ -90,7 +90,7 @@ def test_obtener_historial_cliente(alquiler_service, mocks):
     mocks["alqu_repo"].obtener_por_cliente.return_value = [{
         "id_alquiler": 1,
         "id_cliente": 10,
-        "codigo_pelicula": "COD1",
+        "id_pelicula": "COD1",
         "fecha_alquiler": "2023-10-01",
         "fecha_devolucion_prevista": "2023-10-04",
         "fecha_devolucion_real": None
