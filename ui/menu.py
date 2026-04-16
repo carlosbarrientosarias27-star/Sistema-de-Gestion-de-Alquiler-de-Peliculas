@@ -91,12 +91,12 @@ class Menu:
 
 
     def _añadir_pelicula(self) -> None:
-        id = input("id: ").strip()
+        id_pelicula = input("id: ").strip()
         titulo = input("Título: ").strip()
         director = input("Director: ").strip()
         try:
             copias = self._leer_int("Número de copias: ")
-            self._pelicula_service.registrar_pelicula(id, titulo, director, copias)
+            self._pelicula_service.registrar_pelicula(id_pelicula, titulo, director, copias)
             print("\n✅ Película añadida correctamente.")
         except ValueError:
             print("\n❌ Error: Las copias deben ser un número.")
