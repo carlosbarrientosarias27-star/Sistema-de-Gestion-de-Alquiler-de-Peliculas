@@ -1,4 +1,4 @@
-name: Video Club CI
+name: Sistema_Gestion_Alquiler_Peliculas CI
 
 on:
   push:
@@ -26,7 +26,6 @@ jobs:
 
     - name: Run DB Init
       run: python database/init_db.py
-      working-directory: ./video_club
       env:
         PYTHONPATH: .
 
