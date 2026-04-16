@@ -5,7 +5,7 @@ class Multa:
     id_multa: int
     id_alquiler: int
     dias_retraso: int
-    importe: float
+    importe: float 
 
     TARIFA_POR_DIA: float = 1.50  # euros por día de retraso
 
