@@ -4,7 +4,7 @@ import os
 # Add the current directory to the path so it can find connection.py
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from connection import get_connection
+from connection import obtener_conexion 
 
 def init_db() -> None:
     """Crea las tablas necesarias si no existen.
@@ -12,7 +12,7 @@ def init_db() -> None:
     Output:
         None
     """
-    conn = get_connection()
+    conn = obtener_conexion()
     cursor = conn.cursor()
 
     cursor.execute("""

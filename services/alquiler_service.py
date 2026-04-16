@@ -3,7 +3,7 @@ from datetime import date, timedelta
 from typing import Optional, List
 
 
-from database.connection import get_connection
+from database.connection import obtener_conexion
 from models.alquiler import Alquiler
 from models.multa import Multa
 from services.multa_service import MultaService
@@ -104,7 +104,7 @@ class AlquilerService:
         Output:
             list[Alquiler]: Lista de objetos Alquiler activos.
         """
-        with get_connection() as conn:
+        with obtener_conexion() as conn:
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM alquileres WHERE fecha_devolucion_real IS NULL")
             filas = cursor.fetchall()

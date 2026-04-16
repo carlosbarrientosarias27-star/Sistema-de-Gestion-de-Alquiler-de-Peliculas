@@ -2,14 +2,14 @@ import sqlite3
 
 DB_NAME = "video_club.db"
 
-def get_connection():
+def obtener_conexion():
     conn = sqlite3.connect(DB_NAME)
     conn.row_factory = sqlite3.Row # Configurado una sola vez
     conn.execute("PRAGMA foreign_keys = ON;")
     return conn
 
 def crear_tablas() -> None:
-    conn = get_connection()
+    conn = obtener_conexion()
     cursor = conn.cursor()
 
     # Tabla Películas

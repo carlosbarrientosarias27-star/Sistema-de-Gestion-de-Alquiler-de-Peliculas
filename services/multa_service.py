@@ -1,6 +1,6 @@
 import sqlite3
 from typing import Optional, List
-from database.connection import get_connection
+from database.connection import obtener_conexion
 from models.multa import Multa
 
 
@@ -22,7 +22,7 @@ class MultaService:
         importe = Multa.calcular_importe(dias_retraso)
 
 
-        with get_connection() as conn:
+        with obtener_conexion() as conn:
             cursor = conn.cursor()
             try:
                 cursor.execute(
@@ -40,7 +40,7 @@ class MultaService:
 
     def obtener_multas_por_alquiler(self, id_alquiler: int) -> List[Multa]:
         """Busca multas asociadas a un alquiler específico."""
-        with get_connection() as conn:
+        with obtener_conexion() as conn:
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM multas WHERE id_alquiler = ?", (id_alquiler,))
@@ -50,7 +50,7 @@ class MultaService:
 
     def listar_todas_las_multas(self) -> List[Multa]:
         """Devuelve todas las multas registradas, de la más reciente a la más antigua."""
-        with get_connection() as conn:
+        with obtener_conexion() as conn:
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM multas ORDER BY id_multa DESC")
@@ -65,7 +65,7 @@ class MultaService:
         Input: id_cliente (int)
         Output: float (Suma total)
         """
-        with get_connection() as conn:
+        with obtener_conexion() as conn:
             cursor = conn.cursor()
             # Realizamos JOIN entre multas y alquileres para filtrar por cliente
             cursor.execute("""

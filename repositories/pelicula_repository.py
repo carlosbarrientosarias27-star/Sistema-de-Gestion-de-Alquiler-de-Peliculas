@@ -1,10 +1,10 @@
-from database.connection import get_connection
+from database.connection import obtener_conexion
 from models.pelicula import Pelicula
 
 class PeliculaRepository:
     def guardar(self, pelicula: Pelicula):
         """Guarda una nueva película en la base de datos."""
-        with get_connection() as conn:
+        with obtener_conexion() as conn:
             cursor = conn.cursor()
             cursor.execute(
                 "INSERT INTO peliculas (id_pelicula, titulo, director, copias_disponibles) VALUES (?, ?, ?, ?)",
@@ -14,7 +14,7 @@ class PeliculaRepository:
 
     def obtener_por_codigo(self, codigo: str):
         """Busca una película por su código único."""
-        with get_connection() as conn:
+        with obtener_conexion() as conn:
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM peliculas WHERE id = ?", (id,))
             row = cursor.fetchone()
@@ -29,7 +29,7 @@ class PeliculaRepository:
 
     def reducir_stock(self, codigo: str):
         """Reduce en 1 las copias disponibles."""
-        with get_connection() as conn:
+        with obtener_conexion() as conn:
             cursor = conn.cursor()
             cursor.execute(
                 "UPDATE peliculas SET copias_disponibles = copias_disponibles - 1 WHERE id = ?",
@@ -39,7 +39,7 @@ class PeliculaRepository:
 
     def aumentar_stock(self, codigo: str):
         """Aumenta en 1 las copias disponibles."""
-        with get_connection() as conn:
+        with obtener_conexion() as conn:
             cursor = conn.cursor()
             cursor.execute(
                 "UPDATE peliculas SET copias_disponibles = copias_disponibles + 1 WHERE id = ?",
@@ -49,7 +49,7 @@ class PeliculaRepository:
 
     def obtener_todos(self):
         """Devuelve una lista de todas las películas."""
-        with get_connection() as conn:
+        with obtener_conexion() as conn:
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM peliculas")
             rows = cursor.fetchall()
