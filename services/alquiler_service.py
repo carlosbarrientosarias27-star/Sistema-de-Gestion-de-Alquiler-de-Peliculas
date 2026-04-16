@@ -19,13 +19,13 @@ class AlquilerService:
         self._cliente_repo = cliente_repo
         self._alquiler_repo = alquiler_repo
 
-    def alquilar_pelicula(self, id_cliente: int, codigo_pelicula: str, dias: int) -> Alquiler:
+    def alquilar_pelicula(self, id_cliente: int, id_pelicula: int, dias: int) -> Alquiler:
         """
         Registra un nuevo alquiler, validando existencia y stock.
        
         Input:
             id_cliente: ID del cliente que alquila.
-            codigo_pelicula: Código único de la película.
+            id_pelicula: Código único de la película.
             dias: Duración del préstamo.
         Output:
             Alquiler: El objeto de alquiler creado.
@@ -33,7 +33,7 @@ class AlquilerService:
         if dias <= 0:
             raise ValueError("Los días deben ser positivos")
 
-        peli = self._pelicula_repo.obtener_por_codigo(codigo_pelicula)
+        peli = self._pelicula_repo.obtener_por_codigo(id_pelicula)
         if not peli:
             raise ValueError("Película no encontrada")
         if peli["copias_disponibles"] <= 0:
@@ -47,12 +47,12 @@ class AlquilerService:
 
         try:
             id_generado = self._alquiler_repo.crear(
-                id_cliente, codigo_pelicula, fecha_alquiler, fecha_prevista
+                id_cliente, id_pelicula, fecha_alquiler, fecha_prevista
             )
 
-            self._pelicula_repo.reducir_stock(codigo_pelicula)
+            self._pelicula_repo.reducir_stock(id_pelicula)
             
-            return Alquiler(id_generado, id_cliente, codigo_pelicula, fecha_alquiler, fecha_prevista, None)
+            return Alquiler(id_generado, id_cliente, id_pelicula, fecha_alquiler, fecha_prevista, None)
        
         except sqlite3.Error as e:
             raise RuntimeError(f"Error crítico en la base de datos: {e}")
@@ -130,7 +130,7 @@ class AlquilerService:
         return Alquiler(
             id_alquiler=row["id_alquiler"],
             id_cliente=row["id_cliente"],
-            codigo_pelicula=row["codigo_pelicula"],
+            id_pelicula=row["id_pelicula"],
             fecha_alquiler=date.fromisoformat(row["fecha_alquiler"]),
             fecha_devolucion_prevista=date.fromisoformat(row["fecha_devolucion_prevista"]),
             fecha_devolucion_real=date.fromisoformat(row["fecha_devolucion_real"]) if row["fecha_devolucion_real"] else None
