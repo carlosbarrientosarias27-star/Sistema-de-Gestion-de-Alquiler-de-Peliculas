@@ -4,7 +4,7 @@ import os
 # Add the current directory to the path so it can find connection.py
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from connection import obtener_conexion 
+from database.connection import obtener_conexion 
 
 def init_db() -> None:
     """Crea las tablas necesarias si no existen.
@@ -35,10 +35,10 @@ def init_db() -> None:
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS alquileres (
         id_alquiler INTEGER PRIMARY KEY AUTOINCREMENT,
-        id_cliente INTEGER,
-        id_pelicula INTEGER,
-        fecha_alquiler TEXT,
-        fecha_devolucion_prevista TEXT,
+        id_cliente INTEGER NOT NULL,
+        id_pelicula INTEGER NOT NULL,
+        fecha_alquiler TEXT NOT NULL,
+        fecha_devolucion_prevista TEXT NOT NULL,
         fecha_devolucion_real TEXT,
         FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente),
         FOREIGN KEY (id_pelicula) REFERENCES peliculas(id_pelicula)
