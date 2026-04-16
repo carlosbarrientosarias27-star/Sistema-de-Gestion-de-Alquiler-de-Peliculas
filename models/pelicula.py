@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Pelicula:
-    id_peliculas: int
+    id_pelicula: int
     titulo: str
     director: str
     copias_disponibles: int
@@ -22,4 +22,4 @@ class Pelicula:
         self.copias_disponibles += 1
 
     def __repr__(self) -> str:
-        return f"[{self.id_peliculas}] {self.titulo} - {self.director} ({self.copias_disponibles} copias)"
+        return f"[{self.id_pelicula}] {self.titulo} - {self.director} ({self.copias_disponibles} copias)"
