@@ -87,7 +87,7 @@ video_club/
 ├── ui/
 │   └── menu.py                 # Menú interactivo de consola
 ├── tests/
-│   └── test_alquiler_service.py   
+│    └── test_alquiler_service.py   
 |    └── test_cliente_service.py
 |    └── test_cliente.py
 |    └── test_multa.py
