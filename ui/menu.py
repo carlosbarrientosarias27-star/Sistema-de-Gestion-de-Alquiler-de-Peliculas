@@ -44,9 +44,9 @@ class Menu:
     def ejecutar(self) -> None:
         """Método principal llamado por main.py"""
         opciones: dict[str, Callable[[], None]] = {
-            "1": self._añadir_pelicula,
+            "1": self._añadir_peliculas,
             "2": self._listar_peliculas,
-            "3": self._registrar_cliente,
+            "3": self._registrar_clientes,
             "4": self._listar_clientes,
             "5": self._realizar_alquiler,
             "6": self._realizar_devolucion,
@@ -58,12 +58,12 @@ class Menu:
 
         while True:
             print("\n" + "=" * 10 + " VIDEOCLUB " + "=" * 10)
-            print("1. Añadir película")
+            print("1. Añadir películas")
             print("2. Listar películas")
-            print("3. Registrar cliente")
+            print("3. Registrar clientes")
             print("4. Listar clientes")
-            print("5. Alquilar película")
-            print("6. Devolver película")
+            print("5. Alquilar películas")
+            print("6. Devolver películas")
             print("7. Ver alquileres activos")
             print("8. Ver multas")
             print("9. Ver historial de cliente")
@@ -90,7 +90,7 @@ class Menu:
     # --- Métodos Privados (Convertidos de funciones a métodos de clase) ---
 
 
-    def _añadir_pelicula(self) -> None:
+    def _añadir_peliculas(self) -> None:
         id_pelicula = input("id_pelicula: ").strip()
         titulo = input("Título: ").strip()
         director = input("Director: ").strip()
@@ -109,7 +109,7 @@ class Menu:
             for p in peliculas: print(p)
 
 
-    def _registrar_cliente(self) -> None:
+    def _registrar_clientes(self) -> None:
         nombre = input("Nombre: ").strip()
         email = input("Email: ").strip()
         self._cliente_service.registrar_cliente(nombre, email)
@@ -154,7 +154,7 @@ class Menu:
         for m in multas: print(m)
 
 
-    def _ver_historial_cliente(self) -> None:
+    def _ver_historial_clientes(self) -> None:
         try:
             id_cli = self._leer_int("ID Cliente: ")
             hist = self._alquiler_service.obtener_historial_cliente(id_cli)
