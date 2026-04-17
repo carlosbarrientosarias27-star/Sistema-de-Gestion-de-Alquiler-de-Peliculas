@@ -3,7 +3,7 @@ from models.pelicula import Pelicula
 from database.connection import obtener_conexion
 
 class PeliculaService:
-    def registrar_pelicula(self, id_pelicula: int, titulo: str, director: str, copias: int) -> None:
+    def registrar_peliculas(self, id_pelicula: int, titulo: str, director: str, copias: int) -> None:
         if copias < 0:
             raise ValueError("Las copias no pueden ser negativas.")
         if self.buscar_por_codigo(id_pelicula):

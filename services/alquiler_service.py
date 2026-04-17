@@ -19,7 +19,7 @@ class AlquilerService:
         self._cliente_repo = cliente_repo
         self._alquiler_repo = alquiler_repo
 
-    def alquilar_pelicula(self, id_cliente: int, id_pelicula: int, dias: int) -> Alquiler:
+    def alquilar_peliculas(self, id_cliente: int, id_pelicula: int, dias: int) -> Alquiler:
         """
         Registra un nuevo alquiler, validando existencia y stock.
        
@@ -58,7 +58,7 @@ class AlquilerService:
             raise RuntimeError(f"Error crítico en la base de datos: {e}")
 
 
-    def devolver_pelicula(self, id_alquiler: int, fecha_real: Optional[date] = None) -> dict:
+    def devolver_peliculas(self, id_alquiler: int, fecha_real: Optional[date] = None) -> dict:
         """
         Procesa la devolución de una película, calcula multa si hay retraso.
         
@@ -112,7 +112,7 @@ class AlquilerService:
             return [self._mapear_alquiler(f) for f in filas]
 
 
-    def obtener_historial_cliente(self, id_cliente: int) -> List[Alquiler]:
+    def obtener_historial_clientes(self, id_cliente: int) -> List[Alquiler]:
         """
         Obtiene todos los alquileres realizados por un cliente específico.
        

@@ -58,7 +58,7 @@ class MultaService:
             return [self._mapear_multa(f) for f in filas]
 
 
-    def total_multas_cliente(self, id_cliente: int) -> float:
+    def total_multas_clientes(self, id_cliente: int) -> float:
         """
         Calcula la suma total de importes de multas para un cliente específico.
        
@@ -80,7 +80,7 @@ class MultaService:
             return round(total, 2)
 
 
-    def _mapear_multa(self, row: sqlite3.Row) -> Multa:
+    def _mapear_multas(self, row: sqlite3.Row) -> Multa:
         """Helper para convertir filas de BD en objetos Multa."""
         return Multa(
             id_multa=row["id_multa"],

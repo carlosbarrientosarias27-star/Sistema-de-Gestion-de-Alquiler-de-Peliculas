@@ -3,7 +3,7 @@ from models.cliente import Cliente
 from database.connection import obtener_conexion
 
 class ClienteService:
-    def registrar_cliente(self, nombre: str, email: str) -> int:
+    def registrar_clientes(self, nombre: str, email: str) -> int:
         if not nombre or not email:
             raise ValueError("Nombre y email son obligatorios.")
         
@@ -17,7 +17,7 @@ class ClienteService:
             raise RuntimeError("No se pudo registrar el cliente")
         return id_generado
 
-    def buscar_cliente(self, id_cliente: int) -> Optional[Cliente]:
+    def buscar_clientes(self, id_cliente: int) -> Optional[Cliente]:
         conn = obtener_conexion()
         cursor = conn.cursor()
         cursor.execute("SELECT id_cliente, nombre, email FROM clientes WHERE id_cliente = ?", (id_cliente,))
