@@ -52,7 +52,7 @@ class Menu:
             "6": self._realizar_devolucion,
             "7": self._ver_alquileres_activos,
             "8": self._ver_multas,
-            "9": self._ver_historial_cliente,
+            "9": self._ver_historial_clientes,
         }
 
 
